@@ -8,9 +8,12 @@
                 "-fdiagnostics-color=always",
                 "-g",
                 "${file}",
+                "${workspaceFolder}\\source\\bigInteger.cpp",
+                "${workspaceFolder}\\source\\bigDecimal.cpp",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe",
-                "--include-directory=${workspaceFolder}\\include"
+                "--include-directory",
+                "${workspaceFolder}\\include"
             ],
             "options": {
                 "cwd": "D:\\msys64\\mingw64\\bin"

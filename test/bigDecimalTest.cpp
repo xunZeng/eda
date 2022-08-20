@@ -6,16 +6,20 @@
   * @brief      Function test for bigDecimal.cpp.
   ******************************************************************************/
 
+#include "testDef.h"
+
+#ifdef BIGDECIMAL_TEST
+
 #include <iostream>
 #include "bigDecimal.h"
 
 /**
- * @brief main function
+ * @brief bigDecimal main function
  * 
  * @return int: return 0 if sucess
  */
-int main(){
-  std::cout << "hello world" << std::endl;
-  return 0;
-    
+int main() {
+    return 0;
 }
+
+#endif

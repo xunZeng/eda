@@ -10,15 +10,19 @@
 #define _BIGDECIMAL_H_
 
 #include <string>
+#include "bigInteger.h"
 
-namespace db{
+/**
+ * @brief math base
+ * 
+ */
+namespace mb {
+  
   /**
-   * @brief redefine type
+   * @brief bigDecimal class
    * 
    */
-  using uInt = unsigned int;
-
-  class bigDecimal{
+  class bigDecimal {
 
     private:
         std::string     value_;
