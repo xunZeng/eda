@@ -16,7 +16,7 @@
  * @brief math base
  * 
  */
-namespace mb {
+namespace math {
   
   /**
    * @brief bigDecimal class

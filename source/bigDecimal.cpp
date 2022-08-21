@@ -12,14 +12,14 @@
  * @brief global & static region
  * 
  */
-mb::uInt mb::bigDecimal::scale_     = 0;
-mb::uInt mb::bigDecimal::precision_ = 0;
+math::uInt math::bigDecimal::scale_     = 0;
+math::uInt math::bigDecimal::precision_ = 0;
 
-mb::bigDecimal::bigDecimal() {
+math::bigDecimal::bigDecimal() {
 }
 
-mb::bigDecimal::bigDecimal(const bigDecimal& num) : value_(num.value_) {
+math::bigDecimal::bigDecimal(const bigDecimal& num) : value_(num.value_) {
 }
 
-mb::bigDecimal::~bigDecimal() {
+math::bigDecimal::~bigDecimal() {
 }

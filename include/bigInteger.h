@@ -16,7 +16,7 @@
  * @brief math base
  * 
  */
-namespace mb {  
+namespace math {  
     /**
      * @brief redefine type
      * 
@@ -27,10 +27,25 @@ namespace mb {
      * @brief macro definition
      * 
      */
-    constexpr char NEGATIVE_SIGN =  '-';
-    constexpr bool NEGATIVE      = true;
-    constexpr bool POSITIVE     = false;
-    
+    constexpr char POSITIVE_SIGN = 0X2B;
+    constexpr char NEGATIVE_SIGN = 0X2D;
+    constexpr bool IS_POSITIVE  = false;
+    constexpr bool IS_NEGATIVE   = true;
+
+    constexpr char ZERO  = 0X30;
+    constexpr char ONE   = 0X31;
+    constexpr char TWO   = 0X32;
+    constexpr char THREE = 0X33;
+    constexpr char FOUR  = 0X34;
+    constexpr char FIVE  = 0X35;
+    constexpr char SIX   = 0X36;
+    constexpr char SEVEN = 0X37;
+    constexpr char EIGHT = 0X38;
+    constexpr char NINE  = 0X39;
+
+    constexpr char MIN_DIGIT = ZERO;
+    constexpr char MAX_DIGTI = NINE;
+
     /**
      * @brief bigInter class
      * 
@@ -108,13 +123,37 @@ namespace mb {
         
         private:
             /**
-             * @brief check if a num is negative
+             * @brief check if a num has sign
              * 
              * @param num a string type num
-             * @return true is negative
-             * @return false is positive
+             * @return true has sign
+             * @return false no sign
              */
-            bool isNegative(const std::string& num);
+            static bool hasSign(const std::string& num);
+            /**
+             * @brief check if a num is IS_NEGATIVE
+             * 
+             * @param num a string type num
+             * @return true is IS_NEGATIVE
+             * @return false is IS_POSITIVE
+             */
+            static bool isNegative(const std::string& num);
+            /**
+             * @brief check if a num is digit
+             * 
+             * @param num a char(ASCII) type num
+             * @return true is a digit
+             * @return false isnt a digit
+             */
+            static bool isDigit(const char& num);
+            /**
+             * @brief check if a num is legal
+             * 
+             * @param num a string tyep num
+             * @return true is legal
+             * @return false isnt legal
+             */
+            static bool isLegal(const std::string& num);
             /**
              * @brief init a string num to bigInteger
              * 
@@ -123,7 +162,8 @@ namespace mb {
             void init(const std::string& num);
 
         public:
-            friend std::ostream& operator<<(std::ostream& os, const mb::bigInteger& num);
+            friend std::ostream& operator<<(std::ostream& os, const math::bigInteger& num);
+            friend std::istream& operator>>(std::istream& is, math::bigInteger& num);
             /**
              * @brief override operator =
              * 
@@ -140,7 +180,15 @@ namespace mb {
      * @param num a bigInteger num
      * @return std::ostream& 
      */
-    std::ostream& operator<<(std::ostream& os, const mb::bigInteger& num);
+    std::ostream& operator<<(std::ostream& os, const math::bigInteger& num);
+    /**
+     * @brief override operator >>
+     * 
+     * @param is input
+     * @param num a bigInteger num
+     * @return std::istream& 
+     */
+    std::istream& operator>>(std::istream& is, math::bigInteger& num);
 }
 
 

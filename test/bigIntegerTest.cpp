@@ -19,16 +19,19 @@
  * @return int: return 0 if sucess
  */
 int main() {
-    //mb::bigInteger i(std::string("10.034445"));
-    auto  s = std::string("10.0");
+    //math::bigInteger i(std::string("10.034445"));
+    auto  s = std::string("");
     //std::cout << s << std::endl;
-    mb::bigInteger j(s);
-    mb::bigInteger k(-109221);
-    mb::bigInteger kk;
-    mb::bigInteger l = kk = -102109412784012;
+    math::bigInteger j(s);
+    math::bigInteger k(-109221);
+    math::bigInteger kk;
+    math::bigInteger l = kk = -102109412784012;
+    
     //std::cout << j << std::endl;
     std::cout << j << "   " << k << std::endl;
     std::cout << l << "  " << kk << std::endl;
+    std::cin >> j ;
+    std::cout << j << std::endl;
     return 0;
 }
 

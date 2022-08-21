@@ -8,78 +8,124 @@
 
 #include "bigInteger.h"
 #include <iostream>
-mb::bigInteger::bigInteger() {
+
+math::bigInteger::bigInteger() : sign_(IS_POSITIVE), value_(1, ZERO) {
 }
 
-mb::bigInteger::bigInteger(const bigInteger& num) : value_(num.value_), sign_(num.sign_) {
+math::bigInteger::bigInteger(const bigInteger& num) : sign_(num.sign_), value_(num.value_) {
 }
 
-mb::bigInteger::bigInteger(const std::string& num) {
-   init(num);
+math::bigInteger::bigInteger(const std::string& num) {
+    init(num);      
 }
 
-mb::bigInteger::bigInteger(const char* num) {
-    std::string string_num = num;
-    init(string_num);
+math::bigInteger::bigInteger(const char* num) {
+    std::string str_num = num;
+    init(str_num); 
 }
 
-mb::bigInteger::bigInteger(const int& num) {
-    auto string_num = std::to_string(num);
-    init(string_num);
+math::bigInteger::bigInteger(const int& num) {
+    auto str_num = std::to_string(num);
+    init(str_num); 
 }
 
-mb::bigInteger::bigInteger(const uInt& num) {
-    auto string_num = std::to_string(num);
-    init(string_num);
+math::bigInteger::bigInteger(const uInt& num) {
+    auto str_num = std::to_string(num);
+    init(str_num);  
 }
 
-mb::bigInteger::bigInteger(const long long& num) {
-    auto string_num = std::to_string(num);
-    init(string_num);
+math::bigInteger::bigInteger(const long long& num) {
+    auto str_num = std::to_string(num);
+    init(str_num);  
 }
 
-mb::bigInteger::bigInteger(const float& num) {
-    auto string_num = std::to_string(num);
-    init(string_num);
+math::bigInteger::bigInteger(const float& num) {
+    auto str_num = std::to_string(num);
+    init(str_num);  
 }
 
-mb::bigInteger::bigInteger(const double& num) {
-    auto string_num = std::to_string(num);
-    init(string_num);
+math::bigInteger::bigInteger(const double& num) {
+    auto str_num = std::to_string(num);
+    init(str_num);  
 }
 
-mb::bigInteger::bigInteger(const long double& num) {
-    auto string_num = std::to_string(num);
-    init(string_num);
+math::bigInteger::bigInteger(const long double& num) {
+    auto str_num = std::to_string(num);
+    init(str_num);  
 }
     
-mb::bigInteger::~bigInteger() {
+math::bigInteger::~bigInteger() {
 }
 
-bool mb::bigInteger::isNegative(const std::string& num) {
+bool math::bigInteger::hasSign(const std::string& num) {
+    return (*num.begin() == POSITIVE_SIGN) || (*num.begin() == NEGATIVE_SIGN);
+}
+
+bool math::bigInteger::isNegative(const std::string& num) {
     return *num.begin() == NEGATIVE_SIGN;
 }
 
-void mb::bigInteger::init(const std::string& num) {
+bool math::bigInteger::isDigit(const char& num) {
+    return (MIN_DIGIT <= num) && (num <= MAX_DIGTI);
+}
+
+bool math::bigInteger::isLegal(const std::string& num) {
+    if(!num.size()) { //check size
+        std::cout << "Abnormal number of digits!" << std::endl;
+        return false;
+    }
+    std::string check_num = hasSign(num) ? std::string(num.begin() + 1, num.end())
+                                         : std::string(num.begin() + 0, num.end());
+    if(!check_num.size()) { //check size
+        std::cout << "Abnormal number of digits!" << std::endl;
+        return false;
+    }
+    if((check_num.size() > 1) && (*check_num.begin() == ZERO)) { //check the first digit
+        std::cout << "The leading position of a non-zero integer cannot be 0!" << std::endl;
+        return false;
+    }
+    for(auto it = check_num.begin(); it != check_num.end(); it++) {
+        if(!isDigit(*it)) {
+            std::cout << "Integer must have all digits!" << std::endl;
+            return false;
+        }        
+    }
+    return true;
+}
+
+void math::bigInteger::init(const std::string& num) {
+    if(!isLegal(num)) { 
+        std::cout << "The Integer has been automatically set to 0!" << std::endl;
+        this->sign_ = IS_POSITIVE;
+        this->value_ = (1, ZERO);
+        return;
+    }
     if(isNegative(num)) {
-        this->sign_ = NEGATIVE;
+        this->sign_ = IS_NEGATIVE;
         this->value_ = std::string(num.begin() + 1, num.end());
     }
     else {
-        this->sign_ = POSITIVE;
+        this->sign_ = IS_POSITIVE;
         this->value_ = num;
     }
 }
 
-std::ostream& mb::operator<<(std::ostream& os, const mb::bigInteger& num) {
-        if(num.sign_ == mb::NEGATIVE)
+std::ostream& math::operator<<(std::ostream& os, const math::bigInteger& num) {
+        if(num.sign_ == math::IS_NEGATIVE)
             os << NEGATIVE_SIGN << num.value_ ;
         else   
             os << num.value_ ; 
         return os;       
 }
 
-mb::bigInteger& mb::bigInteger::operator=(const bigInteger& num) {
+std::istream& math::operator>>(std::istream& is, math::bigInteger& num) {
+    std::string str_num;
+    is >> str_num;
+    num.init(str_num);
+    return is;    
+}
+
+math::bigInteger& math::bigInteger::operator=(const bigInteger& num) {
     this->sign_ = num.sign_;
     this->value_ = num.value_;
     return *this;
