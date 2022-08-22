@@ -2,7 +2,7 @@
   * @file       bigInteger.cpp
   * @author     Xun Zeng
   * @date       2022-08-20
-  * @lastedit   2022-08-20
+  * @lastedit   2022-08-22
   * @brief      Big integer arithmetic.
   ******************************************************************************/
 
@@ -111,11 +111,13 @@ void math::bigInteger::init(const std::string& num) {
 }
 
 std::ostream& math::operator<<(std::ostream& os, const math::bigInteger& num) {
-        if(num.sign_ == math::IS_NEGATIVE)
-            os << NEGATIVE_SIGN << num.value_ ;
-        else   
-            os << num.value_ ; 
-        return os;       
+    if(num.sign_ == math::IS_NEGATIVE) {
+        os << NEGATIVE_SIGN << num.value_ ;
+    }   
+    else {
+        os << num.value_ ; 
+    }      
+    return os;       
 }
 
 std::istream& math::operator>>(std::istream& is, math::bigInteger& num) {
@@ -131,3 +133,37 @@ math::bigInteger& math::bigInteger::operator=(const bigInteger& num) {
     return *this;
 }
 
+bool math::bigInteger::operator==(const bigInteger& num)  const {
+    return (this->sign_ == num.sign_) && (this->value_ == num.value_);
+}
+
+bool math::bigInteger::operator!=(const bigInteger& num) const {
+    return !(*this == num);
+}
+
+bool math::bigInteger::operator<(const bigInteger& num) const {
+    if(this->sign_ != num.sign_) {
+        return this->sign_;
+    }
+    if(this->value_.size() != num.value_.size()) {
+        return (this->value_.size() > num.value_.size()) && (this->sign_);
+    }
+    for(auto i = 0; i < this->value_.size(); ++i) {
+        if(this->value_.at(i) != num.value_.at(i)) {
+            return this->value_.at(i) < num.value_.at(i);
+        }
+    }
+    return false;
+}
+
+bool math::bigInteger::operator<=(const bigInteger& num) const {
+    return (*this < num) || (*this == num);
+}
+
+bool math::bigInteger::operator>(const bigInteger& num) const {
+    return !(*this <= num);
+}
+
+bool math::bigInteger::operator>=(const bigInteger& num) const {
+    return !(*this < num);
+}

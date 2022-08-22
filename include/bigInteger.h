@@ -2,7 +2,7 @@
   * @file       bigInteger.h
   * @author     Xun Zeng
   * @date       2022-08-20
-  * @lastedit   2022-08-20
+  * @lastedit   2022-08-22
   * @brief      Big integer arithmetic.
   ******************************************************************************/
 
@@ -171,6 +171,55 @@ namespace math {
              * @return bigInteger& 
              */
             bigInteger& operator=(const bigInteger& num);
+            /**
+             * @brief check if this->num == num
+             * 
+             * @param num a bigInteger num
+             * @return true ==
+             * @return false !=
+             */
+            bool operator==(const bigInteger& num) const;
+            /**
+             * @brief check if this->num != num
+             * 
+             * @param num a bigInteger num
+             * @return true !=
+             * @return false ==
+             */
+            bool operator!=(const bigInteger& num) const;
+            /**
+             * @brief check if this->num < num
+             * 
+             * @param num a bigInteger num
+             * @return true <
+             * @return false >=
+             */
+            bool operator<(const bigInteger& num) const;
+            /**
+             * @brief check if this->num <= num
+             * 
+             * @param num a bigInteger num
+             * @return true <=
+             * @return false >
+             */
+            bool operator<=(const bigInteger& num) const;
+            /**
+             * @brief check if this->num > num
+             * 
+             * @param num a bigInteger num
+             * @return true >
+             * @return false <=
+             */
+            bool operator>(const bigInteger& num) const;
+            /**
+             * @brief check if this->num >= num
+             * 
+             * @param num a bigInteger num
+             * @return true >=
+             * @return false <
+             */
+            bool operator>=(const bigInteger& num) const;
+
     };
 
     /**
