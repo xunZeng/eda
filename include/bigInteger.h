@@ -2,7 +2,7 @@
   * @file       bigInteger.h
   * @author     Xun Zeng
   * @date       2022-08-20
-  * @lastedit   2022-08-22
+  * @lastedit   2022-08-23
   * @brief      Big integer arithmetic.
   ******************************************************************************/
 
@@ -160,7 +160,31 @@ namespace math {
              * @param num 
              */
             void init(const std::string& num);
-
+            /**
+             * @brief check if num_a < num_b
+             * 
+             * @param num_a a string type positive num
+             * @param num_b a string type positive num
+             * @return true <
+             * @return false >=
+             */
+            static bool isSmaller(const std::string& num_a, const std::string& num_b);
+            /**
+             * @brief sum of tow positive numbers
+             * 
+             * @param num_a a string type positive num
+             * @param num_b a string type positive num
+             * @return bigInteger a string type positive num
+             */
+            static std::string safeAdd(const std::string& num_a, const std::string& num_b);
+            /**
+             * @brief absolute value of the subtraction of two numbers
+             * 
+             * @param num_a a string type positive num
+             * @param num_b a string type positive num
+             * @return bigInteger a string type positive num
+             */
+            static std::string safeSubtract(const std::string& num_a, const std::string& num_b);
         public:
             friend std::ostream& operator<<(std::ostream& os, const math::bigInteger& num);
             friend std::istream& operator>>(std::istream& is, math::bigInteger& num);
@@ -219,6 +243,20 @@ namespace math {
              * @return false <
              */
             bool operator>=(const bigInteger& num) const;
+            /**
+             * @brief sum of two numbers
+             * 
+             * @param num a bigInteger num
+             * @return bigInteger sum
+             */
+            bigInteger operator+(const bigInteger& num);
+            /**
+             * @brief difference between two numbers
+             * 
+             * @param num a bigInteger num
+             * @return bigInteger difference
+             */
+            bigInteger operator-(const bigInteger& num);
 
     };
 

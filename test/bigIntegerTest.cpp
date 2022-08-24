@@ -19,13 +19,9 @@
  * @return int: return 0 if sucess
  */
 int main() {
-    math::bigInteger a = 10, b = -1, c = -1;
-    math::bigInteger f = 0;
-    math::bigInteger e;
-    math::bigInteger d = e = 1;
-    
-    //std::cout << a << " " << b << " " << c << " " << d << " " << e << " " << f<< std::endl;
-    std::cout << (b < c) << std::endl;
+    math::bigInteger a = 10, b = 111123, c = 111111;
+    a = b - c;
+    std::cout << a << std::endl;
     return 0;
 }
 
