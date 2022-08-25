@@ -227,7 +227,7 @@ bool math::bigInteger::operator<(const bigInteger& num) const {
         return this->sign_;
     }
     if(this->value_.size() != num.value_.size()) {
-        return (this->value_.size() > num.value_.size()) && (this->sign_);
+        return (this->value_.size() < num.value_.size()) && (!this->sign_);
     }
     for(auto it_a = this->value_.begin(), it_b = num.value_.begin();
              it_a != this->value_.end() && it_b != num.value_.end();
