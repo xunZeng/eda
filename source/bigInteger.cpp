@@ -2,7 +2,7 @@
   * @file       bigInteger.cpp
   * @author     Xun Zeng
   * @date       2022-08-20
-  * @lastedit   2022-08-23
+  * @lastedit   2022-08-25
   * @brief      Big integer arithmetic.
   ******************************************************************************/
 
@@ -25,32 +25,32 @@ math::bigInteger::bigInteger(const char* num) {
     init(str_num); 
 }
 
-math::bigInteger::bigInteger(const int& num) {
+math::bigInteger::bigInteger(int num) {
     auto str_num = std::to_string(num);
     init(str_num); 
 }
 
-math::bigInteger::bigInteger(const uInt& num) {
+math::bigInteger::bigInteger(uInt num) {
     auto str_num = std::to_string(num);
     init(str_num);  
 }
 
-math::bigInteger::bigInteger(const long long& num) {
+math::bigInteger::bigInteger(long long num) {
     auto str_num = std::to_string(num);
     init(str_num);  
 }
 
-math::bigInteger::bigInteger(const float& num) {
+math::bigInteger::bigInteger(float num) {
     auto str_num = std::to_string(num);
     init(str_num);  
 }
 
-math::bigInteger::bigInteger(const double& num) {
+math::bigInteger::bigInteger(double num) {
     auto str_num = std::to_string(num);
     init(str_num);  
 }
 
-math::bigInteger::bigInteger(const long double& num) {
+math::bigInteger::bigInteger(long double num) {
     auto str_num = std::to_string(num);
     init(str_num);  
 }
@@ -113,7 +113,7 @@ void math::bigInteger::init(const std::string& num) {
 
 bool math::bigInteger::isSmaller(const std::string& num_a, const std::string& num_b) {
     if(num_a.size() != num_b.size()) {
-        return (num_a.size() > num_b.size());
+        return (num_a.size() < num_b.size());
     }
     for(auto i = 0; i < num_a.size(); ++i) {
         if(num_a.at(i) != num_b.at(i)) {
@@ -257,10 +257,16 @@ math::bigInteger math::bigInteger::operator+(const bigInteger& num) {
         sum.value_ = safeAdd(this->value_, num.value_);   
         break;
     case (IS_POSITIVE << 1) | IS_NEGATIVE:
+        sum.sign_ = isSmaller(this->value_, num.value_) ? IS_NEGATIVE : IS_POSITIVE; 
+        sum.value_ = safeSubtract(this->value_, num.value_);
         break;
     case (IS_NEGATIVE << 1) | IS_POSITIVE:
+        sum.sign_ = isSmaller(num.value_, this->value_) ? IS_NEGATIVE : IS_POSITIVE;
+        sum.value_ = safeSubtract(this->value_, num.value_);
         break;
     case (IS_NEGATIVE << 1) | IS_NEGATIVE:
+        sum.sign_ = IS_NEGATIVE;
+        sum.value_ = safeAdd(this->value_, num.value_);
         break;
     default:
         std::cout << "Wrong number sign to be added!" << std::endl;
@@ -273,18 +279,60 @@ math::bigInteger math::bigInteger::operator-(const bigInteger& num) {
     bigInteger dif;
     switch ((this->sign_ << 1) | num.sign_) {
     case (IS_POSITIVE << 1) | IS_POSITIVE:
-        dif.sign_ = *this < num ? IS_NEGATIVE : IS_POSITIVE;
+        dif.sign_ = isSmaller(this->value_, num.value_) ? IS_NEGATIVE : IS_POSITIVE;
         dif.value_ = safeSubtract(this->value_, num.value_); 
         break;
     case (IS_POSITIVE << 1) | IS_NEGATIVE:
+        dif.sign_ = IS_POSITIVE;
+        dif.value_ = safeAdd(this->value_, num.value_);
         break;
     case (IS_NEGATIVE << 1) | IS_POSITIVE:
+        dif.sign_ = IS_NEGATIVE;
+        dif.value_ = safeAdd(this->value_, num.value_);
         break;
     case (IS_NEGATIVE << 1) | IS_NEGATIVE:
+        dif.sign_ = isSmaller(num.value_, this->value_) ? IS_NEGATIVE : IS_POSITIVE;
+        dif.value_ = safeSubtract(this->value_, num.value_);
         break;
     default:
         std::cout << "Wrong number sign to be subtracted!" << std::endl;
         break;
     }
     return dif;
+}
+
+math::bigInteger math::bigInteger::operator-() {
+    bigInteger temp(*this);
+    temp.sign_ = !temp.sign_;
+    return temp;
+}
+
+math::bigInteger& math::bigInteger::operator++() {
+    return *this += static_cast<bigInteger>(1);
+}
+
+math::bigInteger& math::bigInteger::operator--() {
+    
+    return *this -= static_cast<bigInteger>(1);
+}
+
+math::bigInteger math::bigInteger::operator++(int num) {
+    bigInteger temp(*this);
+    *this += num ? static_cast<bigInteger>(num) : static_cast<bigInteger>(1);
+    return temp;
+}
+
+math::bigInteger math::bigInteger::operator--(int num) {
+    bigInteger temp(*this);
+    *this -= num ? static_cast<bigInteger>(num) : static_cast<bigInteger>(1);
+    return temp;
+}
+
+math::bigInteger& math::bigInteger::operator+=(const bigInteger& num) {
+    return *this = *this + num;
+}
+
+math::bigInteger& math::bigInteger::operator-=(const bigInteger& num) {
+    auto i = *this - num;
+    return *this = (*this - num);
 }

@@ -2,7 +2,7 @@
   * @file       bigInteger.h
   * @author     Xun Zeng
   * @date       2022-08-20
-  * @lastedit   2022-08-23
+  * @lastedit   2022-08-25
   * @brief      Big integer arithmetic.
   ******************************************************************************/
 
@@ -61,60 +61,15 @@ namespace math {
              * 
              */
             bigInteger();
-            /**
-             * @brief Construct a new big Decimal object.
-             * 
-             * @param num a bigInteger type num.
-             */
             bigInteger(const bigInteger& num);
-            /**
-             * @brief Construct a new big Decimal object.
-             * 
-             * @param num a string type num .
-             */
             bigInteger(const std::string& num);
-            /**
-             * @brief Construct a new big Decimal object.
-             * 
-             * @param num a char* type num.
-             */
             bigInteger(const char* num);
-            /**
-             * @brief Construct a new big Decimal object.
-             * 
-             * @param num an int type num.
-             */
-            bigInteger(const int& num);
-            /**
-             * @brief Construct a new big Decimal object.
-             * 
-             * @param num an unsigned int type num.
-             */
-            bigInteger(const uInt& num);
-            /**
-             * @brief Construct a new big Decimal object.
-             * 
-             * @param num an long long type num.
-             */
-            bigInteger(const long long& num);
-            /**
-             * @brief Construct a new big Decimal object.
-             * 
-             * @param num an float type num.
-             */
-            bigInteger(const float& num);
-            /**
-             * @brief Construct a new big Decimal object.
-             * 
-             * @param num an double type num.
-             */
-            bigInteger(const double& num);
-            /**
-             * @brief Construct a new big Decimal object.
-             * 
-             * @param num an long double type num.
-             */
-            bigInteger(const long double& num);
+            bigInteger(int num);
+            bigInteger(uInt num);
+            bigInteger(long long num);
+            bigInteger(float num);
+            bigInteger(double num);
+            bigInteger(long double num);
             /**
              * @brief Destroy the big Integer object
              * 
@@ -185,9 +140,12 @@ namespace math {
              * @return bigInteger a string type positive num
              */
             static std::string safeSubtract(const std::string& num_a, const std::string& num_b);
+        
         public:
             friend std::ostream& operator<<(std::ostream& os, const math::bigInteger& num);
             friend std::istream& operator>>(std::istream& is, math::bigInteger& num);
+        
+        public:
             /**
              * @brief override operator =
              * 
@@ -196,85 +154,35 @@ namespace math {
              */
             bigInteger& operator=(const bigInteger& num);
             /**
-             * @brief check if this->num == num
+             * @brief override relationship related operators
              * 
-             * @param num a bigInteger num
-             * @return true ==
-             * @return false !=
              */
             bool operator==(const bigInteger& num) const;
-            /**
-             * @brief check if this->num != num
-             * 
-             * @param num a bigInteger num
-             * @return true !=
-             * @return false ==
-             */
             bool operator!=(const bigInteger& num) const;
-            /**
-             * @brief check if this->num < num
-             * 
-             * @param num a bigInteger num
-             * @return true <
-             * @return false >=
-             */
-            bool operator<(const bigInteger& num) const;
-            /**
-             * @brief check if this->num <= num
-             * 
-             * @param num a bigInteger num
-             * @return true <=
-             * @return false >
-             */
+            bool operator<(const bigInteger& num)  const;
             bool operator<=(const bigInteger& num) const;
-            /**
-             * @brief check if this->num > num
-             * 
-             * @param num a bigInteger num
-             * @return true >
-             * @return false <=
-             */
-            bool operator>(const bigInteger& num) const;
-            /**
-             * @brief check if this->num >= num
-             * 
-             * @param num a bigInteger num
-             * @return true >=
-             * @return false <
-             */
+            bool operator>(const bigInteger& num)  const;
             bool operator>=(const bigInteger& num) const;
             /**
-             * @brief sum of two numbers
+             * @brief override add/subtract related operators
              * 
-             * @param num a bigInteger num
-             * @return bigInteger sum
              */
             bigInteger operator+(const bigInteger& num);
-            /**
-             * @brief difference between two numbers
-             * 
-             * @param num a bigInteger num
-             * @return bigInteger difference
-             */
             bigInteger operator-(const bigInteger& num);
-
+            bigInteger operator-();
+            bigInteger& operator++();
+            bigInteger& operator--();
+            bigInteger operator++(int num);
+            bigInteger operator--(int num);
+            bigInteger& operator+=(const bigInteger& num);
+            bigInteger& operator-=(const bigInteger& num);
     };
 
     /**
-     * @brief override operator <<
+     * @brief override input/output operators
      * 
-     * @param os output
-     * @param num a bigInteger num
-     * @return std::ostream& 
      */
     std::ostream& operator<<(std::ostream& os, const math::bigInteger& num);
-    /**
-     * @brief override operator >>
-     * 
-     * @param is input
-     * @param num a bigInteger num
-     * @return std::istream& 
-     */
     std::istream& operator>>(std::istream& is, math::bigInteger& num);
 }
 
