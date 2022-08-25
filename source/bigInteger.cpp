@@ -229,9 +229,11 @@ bool math::bigInteger::operator<(const bigInteger& num) const {
     if(this->value_.size() != num.value_.size()) {
         return (this->value_.size() > num.value_.size()) && (this->sign_);
     }
-    for(auto i = 0; i < this->value_.size(); ++i) {
-        if(this->value_.at(i) != num.value_.at(i)) {
-            return this->value_.at(i) < num.value_.at(i);
+    for(auto it_a = this->value_.begin(), it_b = num.value_.begin();
+             it_a != this->value_.end() && it_b != num.value_.end();
+                                                     it_a++, it_b++) {
+        if(*it_a != *it_b) {
+            return *it_a < *it_b;
         }
     }
     return false;
