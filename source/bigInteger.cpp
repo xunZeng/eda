@@ -2,13 +2,15 @@
   * @file       bigInteger.cpp
   * @author     Xun Zeng
   * @date       2022-08-20
-  * @lastedit   2022-08-25
+  * @lastedit   2022-08-28
   * @brief      Big integer arithmetic.
   ******************************************************************************/
 
 #include "bigInteger.h"
 #include <iostream>
 #include <algorithm>
+#include <cmath>
+#include <vector>
 
 math::bigInteger::bigInteger() : sign_(IS_POSITIVE), value_(1, ZERO) {
 }
@@ -58,19 +60,23 @@ math::bigInteger::bigInteger(long double num) {
 math::bigInteger::~bigInteger() {
 }
 
-bool math::bigInteger::hasSign(const std::string& num) {
+bool 
+math::bigInteger::hasSign(const std::string& num) {
     return (*num.begin() == POSITIVE_SIGN) || (*num.begin() == NEGATIVE_SIGN);
 }
 
-bool math::bigInteger::isNegative(const std::string& num) {
+bool 
+math::bigInteger::isNegative(const std::string& num) {
     return *num.begin() == NEGATIVE_SIGN;
 }
 
-bool math::bigInteger::isDigit(const char& num) {
+bool 
+math::bigInteger::isDigit(const char& num) {
     return (MIN_DIGIT <= num) && (num <= MAX_DIGTI);
 }
 
-bool math::bigInteger::isLegal(const std::string& num) {
+bool 
+math::bigInteger::isLegal(const std::string& num) {
     if(!num.size()) { //check size
         std::cout << "Abnormal number of digits!" << std::endl;
         return false;
@@ -94,7 +100,8 @@ bool math::bigInteger::isLegal(const std::string& num) {
     return true;
 }
 
-void math::bigInteger::init(const std::string& num) {
+void 
+math::bigInteger::init(const std::string& num) {
     if(!isLegal(num)) { 
         std::cout << "The Integer has been automatically set to 0!" << std::endl;
         this->sign_ = IS_POSITIVE;
@@ -111,7 +118,8 @@ void math::bigInteger::init(const std::string& num) {
     }
 }
 
-bool math::bigInteger::isSmaller(const std::string& num_a, const std::string& num_b) {
+bool 
+math::bigInteger::isSmaller(const std::string& num_a, const std::string& num_b) {
     if(num_a.size() != num_b.size()) {
         return (num_a.size() < num_b.size());
     }
@@ -123,7 +131,10 @@ bool math::bigInteger::isSmaller(const std::string& num_a, const std::string& nu
     return false;
 }
 
-std::string math::bigInteger::safeAdd(const std::string& num_a, const std::string& num_b) {
+std::string 
+math::bigInteger::safeAdd(const std::string& num_a, const std::string& num_b) {
+    //time complexity: O(max(num_a.size(), num_b.size()))
+    //space complexity: O(1)
     std::string sum = "";  
     sum.reserve(std::max(num_a.size(), num_b.size())); //reserve memory
     uInt carry = 0;
@@ -147,7 +158,38 @@ std::string math::bigInteger::safeAdd(const std::string& num_a, const std::strin
     return sum;
 }
 
-std::string math::bigInteger::safeSubtract(const std::string& num_a, const std::string& num_b) {
+std::string 
+math::bigInteger::unsafeSubtract(std::string num_a, std::string num_b) {
+    //time complexity: O(max(num_a.size(), num_b.size()))
+    //space complexity: O(1)
+    int carrier = 0;
+    int bitresult = 0;
+    std::string fullResult;
+    std::string finalResult;
+    makeEqualSize(num_a,num_b);
+    for(int i =0; i < num_a.size(); i++){
+        bitresult = num_a[num_a.size()-i-1] -  num_b[num_b.size()-i-1] - carrier;
+        carrier = 0;
+        if(bitresult < 0){
+            carrier = 1;
+            bitresult = bitresult + 10;
+        }
+        fullResult.push_back(bitresult+ZERO);
+    }
+    for(int i = 0; i < fullResult.size(); i++){
+        finalResult.push_back(fullResult[fullResult.size()-i-1]);
+    }
+    //finalResult.push_back('\0');
+    int pos = finalResult.find_first_not_of(ZERO);
+    if(pos!=std::string::npos)finalResult = finalResult.substr(pos, finalResult.size()-pos);
+    else finalResult = "0";
+    return finalResult;   
+}
+
+std::string 
+math::bigInteger::safeSubtract(std::string num_a, std::string num_b) {   
+    //time complexity: O(max(num_a.size(), num_b.size()))
+    //space complexity: O(1)
     if(isSmaller(num_a, num_b)) {
         return safeSubtract(num_b, num_a);
     }
@@ -184,14 +226,116 @@ std::string math::bigInteger::safeSubtract(const std::string& num_a, const std::
         }
     }
     std::reverse(dif.begin(), dif.end());
-    auto it = dif.begin();
-    while(it != dif.end() && *it == ZERO) {
-        it++;
-    }
-    return std::string(it, dif.end());
+    auto it_first_not_zero = dif.begin() + dif.find_first_not_of(ZERO);
+    return std::string(it_first_not_zero, dif.end());
 }
 
-std::ostream& math::operator<<(std::ostream& os, const math::bigInteger& num) {
+size_t 
+math::bigInteger::makeEqualSize(std::string& num_a, std::string& num_b) {
+    for(auto it_a = num_a.rbegin(), it_b = num_b.rbegin();
+             it_a != num_a.rend() || it_b != num_b.rend();) {
+        if(it_a == num_a.rend() && it_b != num_b.rend()) {
+            num_a = ZERO + num_a;
+        }
+        else if(it_a != num_a.rend() && it_b == num_b.rend()) {
+            num_b = ZERO + num_b;
+        }
+        if(it_a != num_a.rend()) {
+            it_a++;
+        }
+        if(it_b != num_b.rend()) {
+            it_b++;
+        }
+    }
+    return num_a.size();
+}
+
+bool 
+math::bigInteger::isEqual(const std::string& num_a, char num_b) {
+    return num_a.size() == 1 && num_a.at(0) == num_b;
+}
+
+bool 
+math::bigInteger::isEqual(const std::string& num_a, const std::string& num_b) {
+    if(num_a.size() != num_b.size()) {
+        return false;
+    }
+    for(auto it_a = num_a.begin(), it_b = num_b.begin();
+             it_a != num_a.end() && it_b != num_b.end();
+             it_a++, it_b++) {
+        if(*it_a != *it_b) {
+            return false;
+        }
+    }
+    return true;
+}
+
+std::string 
+math::bigInteger::multiply(std::string num_a, std::string num_b) {
+    if(isEqual(num_a, ZERO) || isEqual(num_b, ZERO)) {
+        return "0";//std::to_string(ZERO);
+    }
+    auto size_a = num_a.size(),
+         size_b = num_b.size();
+    auto ans_arr = std::vector<uInt>(size_a + size_b);
+    for (int i = size_a - 1; i >= 0; --i) {
+        uInt x = num_a.at(i) - ZERO;
+        for (int j = size_b - 1; j >= 0; --j) {
+            uInt y = num_b.at(j) - ZERO;
+            ans_arr[i + j + 1] += x * y;
+        }
+    }
+    for (auto i = size_a + size_b - 1; i > 0; --i) {
+        ans_arr[i - 1] += ans_arr[i] / 10;
+        ans_arr[i] %= 10;
+    }
+    uInt index = ans_arr.at(0) == 0 ? 1 : 0;
+    std::string product;
+    while (index < size_a + size_b) {
+        product.push_back(ans_arr[index] + ZERO);
+        index++;
+    }
+    return product; 
+}
+ 
+std::string 
+math::bigInteger::karatsubaMultiply(std::string num_a, std::string num_b) {
+    // fall back to traditional multiplication
+    if(num_a.size() == 1 || num_b.size() ==1){
+    return multiply(num_a, num_b);
+    }
+    // make same size
+    auto size = makeEqualSize(num_a,num_b);
+    auto half = ((size + 1) / 2);  
+    // split num into left and rigth parts
+    std::string a = num_a.substr(0, half);
+    std::string b = num_a.substr(half);
+    std::string c = num_b.substr(0, half);
+    std::string d = num_b.substr(half);
+    // caluate
+    // p1 = a * c
+    // p2 = b * d
+    // p3 = (a + b) * (c + d)
+    // temp = (p3 - p1 -2)
+    std::string p1 = karatsubaMultiply(a,c);
+    std::string p2 = karatsubaMultiply(b,d);
+    std::string p3 = karatsubaMultiply(safeAdd(a,b),safeAdd(c,d));
+    std::string temp = unsafeSubtract(p3, safeAdd(p1,p2));
+    // product = p1 * 2^(32*2*half) + (p3 - p1 - p2) * 2^(32*half) + p2
+    //         = p1 + temp + p2
+    for(int i = 0; i < size / 2 * 2; i++){
+        p1 = p1 + ZERO;
+        if(i < size / 2) {
+            temp = temp + ZERO;     
+        }
+    }
+    auto prodruct =  safeAdd(safeAdd(p1,temp),p2);
+    auto pos = prodruct.find_first_not_of(ZERO);
+    return prodruct.substr(pos == std::string::npos ? 0 : pos);
+}
+
+std::ostream& 
+math::operator<<(std::ostream& os, const math::bigInteger& num) {
     if(num.sign_ == math::IS_NEGATIVE) {
         os << NEGATIVE_SIGN << num.value_ ;
     }   
@@ -201,28 +345,33 @@ std::ostream& math::operator<<(std::ostream& os, const math::bigInteger& num) {
     return os;       
 }
 
-std::istream& math::operator>>(std::istream& is, math::bigInteger& num) {
+std::istream& 
+math::operator>>(std::istream& is, math::bigInteger& num) {
     std::string str_num;
     is >> str_num;
     num.init(str_num);
     return is;    
 }
 
-math::bigInteger& math::bigInteger::operator=(const bigInteger& num) {
+math::bigInteger& 
+math::bigInteger::operator=(const bigInteger& num) {
     this->sign_ = num.sign_;
     this->value_ = num.value_;
     return *this;
 }
 
-bool math::bigInteger::operator==(const bigInteger& num)  const {
+bool 
+math::bigInteger::operator==(const bigInteger& num)  const {
     return (this->sign_ == num.sign_) && (this->value_ == num.value_);
 }
 
-bool math::bigInteger::operator!=(const bigInteger& num) const {
+bool 
+math::bigInteger::operator!=(const bigInteger& num) const {
     return !(*this == num);
 }
 
-bool math::bigInteger::operator<(const bigInteger& num) const {
+bool 
+math::bigInteger::operator<(const bigInteger& num) const {
     if(this->sign_ != num.sign_) {
         return this->sign_;
     }
@@ -239,19 +388,23 @@ bool math::bigInteger::operator<(const bigInteger& num) const {
     return false;
 }
 
-bool math::bigInteger::operator<=(const bigInteger& num) const {
+bool 
+math::bigInteger::operator<=(const bigInteger& num) const {
     return (*this < num) || (*this == num);
 }
 
-bool math::bigInteger::operator>(const bigInteger& num) const {
+bool 
+math::bigInteger::operator>(const bigInteger& num) const {
     return !(*this <= num);
 }
 
-bool math::bigInteger::operator>=(const bigInteger& num) const {
+bool 
+math::bigInteger::operator>=(const bigInteger& num) const {
     return !(*this < num);
 }
 
-math::bigInteger math::bigInteger::operator+(const bigInteger& num) {
+math::bigInteger 
+math::bigInteger::operator+(const bigInteger& num) {
     bigInteger sum;
     switch ((this->sign_ << 1) | num.sign_) {
     case (IS_POSITIVE << 1) | IS_POSITIVE:
@@ -277,7 +430,8 @@ math::bigInteger math::bigInteger::operator+(const bigInteger& num) {
     return sum;
 }
 
-math::bigInteger math::bigInteger::operator-(const bigInteger& num) {
+math::bigInteger 
+math::bigInteger::operator-(const bigInteger& num) {
     bigInteger dif;
     switch ((this->sign_ << 1) | num.sign_) {
     case (IS_POSITIVE << 1) | IS_POSITIVE:
@@ -303,38 +457,66 @@ math::bigInteger math::bigInteger::operator-(const bigInteger& num) {
     return dif;
 }
 
-math::bigInteger math::bigInteger::operator-() {
+math::bigInteger 
+math::bigInteger::operator-() {
     bigInteger temp(*this);
     temp.sign_ = !temp.sign_;
     return temp;
 }
 
-math::bigInteger& math::bigInteger::operator++() {
+math::bigInteger& 
+math::bigInteger::operator++() {
     return *this += static_cast<bigInteger>(1);
 }
 
-math::bigInteger& math::bigInteger::operator--() {
-    
+math::bigInteger& 
+math::bigInteger::operator--() {
     return *this -= static_cast<bigInteger>(1);
 }
 
-math::bigInteger math::bigInteger::operator++(int num) {
+math::bigInteger 
+math::bigInteger::operator++(int num) {
     bigInteger temp(*this);
     *this += num ? static_cast<bigInteger>(num) : static_cast<bigInteger>(1);
     return temp;
 }
 
-math::bigInteger math::bigInteger::operator--(int num) {
+math::bigInteger 
+math::bigInteger::operator--(int num) {
     bigInteger temp(*this);
     *this -= num ? static_cast<bigInteger>(num) : static_cast<bigInteger>(1);
     return temp;
 }
 
-math::bigInteger& math::bigInteger::operator+=(const bigInteger& num) {
+math::bigInteger& 
+math::bigInteger::operator+=(const bigInteger& num) {
     return *this = *this + num;
 }
 
-math::bigInteger& math::bigInteger::operator-=(const bigInteger& num) {
+math::bigInteger& 
+math::bigInteger::operator-=(const bigInteger& num) {
     auto i = *this - num;
     return *this = (*this - num);
+}
+
+math::bigInteger 
+math::bigInteger::operator*(const bigInteger& num) {
+    std::string (*multiply_fun)(std::string num_a, std::string num_b);
+    if(this->value_.size() < KARATSUBA_THRESHOLD 
+    || num.value_.size() < KARATSUBA_THRESHOLD) {
+        multiply_fun = multiply;
+    }
+    else {
+        multiply_fun = karatsubaMultiply;
+    }
+    bigInteger product;
+    product.sign_ = this->sign_ == num.sign_ 
+                  ? IS_POSITIVE : IS_NEGATIVE;
+    product.value_ = multiply_fun(this->value_, num.value_);
+    return product;
+}   
+
+math::bigInteger& 
+math::bigInteger::operator*=(const bigInteger& num) {
+    return *this = *this * num;
 }

@@ -2,7 +2,7 @@
   * @file       bigInteger.h
   * @author     Xun Zeng
   * @date       2022-08-20
-  * @lastedit   2022-08-25
+  * @lastedit   2022-08-28
   * @brief      Big integer arithmetic.
   ******************************************************************************/
 
@@ -46,13 +46,15 @@ namespace math {
     constexpr char MIN_DIGIT = ZERO;
     constexpr char MAX_DIGTI = NINE;
 
+    constexpr uInt KARATSUBA_THRESHOLD = 36;
+
     /**
      * @brief bigInter class
      * 
      */
     class bigInteger
     {
-        public:
+        private:
             std::string value_;
             bool         sign_;
         public:
@@ -139,8 +141,59 @@ namespace math {
              * @param num_b a string type positive num
              * @return bigInteger a string type positive num
              */
-            static std::string safeSubtract(const std::string& num_a, const std::string& num_b);
-        
+            static std::string safeSubtract(std::string num_a, std::string num_b);
+            /**
+             * @brief value of the subtraction of two numbers
+             *        note that it's unsafe when num_a < num_b
+             * 
+             * @param num_a a string type positive num
+             * @param num_b a string type positive num
+             * @return bigInteger a string type positive num
+             */
+            static std::string unsafeSubtract(std::string num_a, std::string num_b);
+            /**
+             * @brief make num_a.size() == num_b.size()
+             * 
+             * @param num_a a string type num
+             * @param num_b a string type num
+             * @return size_t num_a.size() or num_b.size()
+             */
+            static size_t makeEqualSize(std::string& num_a, std::string& num_b);
+            /**
+             * @brief check if num_a == num_b
+             * 
+             * @param num_a a string type num
+             * @param num_b a string type num
+             * @return true ==
+             * @return false !=
+             */
+            static bool isEqual(const std::string& num_a, char num_b);
+            /**
+             * @brief check if num_a == num_b
+             * 
+             * @param num_a a string type num
+             * @param num_b a string type num
+             * @return true ==
+             * @return false !=
+             */
+            static bool isEqual(const std::string& num_a, const std::string& num_b);
+            /**
+             * @brief a optimized algorithm for multiplication
+             * 
+             * @param num_a a string type num
+             * @param num_b a string type num
+             * @return std::string product
+             */
+            static std::string multiply(std::string num_a, std::string num_b);
+            /**
+             * @brief multiply use karatsuba algorithm
+             * 
+             * @param num_a a string type positive num
+             * @param num_b a string type positive num
+             * @return std::string product
+             */
+            static std::string karatsubaMultiply(std::string num_a, std::string num_b);
+
         public:
             friend std::ostream& operator<<(std::ostream& os, const math::bigInteger& num);
             friend std::istream& operator>>(std::istream& is, math::bigInteger& num);
@@ -176,6 +229,9 @@ namespace math {
             bigInteger operator--(int num);
             bigInteger& operator+=(const bigInteger& num);
             bigInteger& operator-=(const bigInteger& num);
+            
+            bigInteger operator*(const bigInteger& num);
+            bigInteger& operator*=(const bigInteger& num);
     };
 
     /**
