@@ -502,13 +502,10 @@ math::bigInteger::operator-=(const bigInteger& num) {
 math::bigInteger 
 math::bigInteger::operator*(const bigInteger& num) {
     std::string (*multiply_fun)(std::string num_a, std::string num_b);
-    if(this->value_.size() < KARATSUBA_THRESHOLD 
-    || num.value_.size() < KARATSUBA_THRESHOLD) {
-        multiply_fun = multiply;
-    }
-    else {
-        multiply_fun = karatsubaMultiply;
-    }
+    multiply_fun = (this->value_.size() < KARATSUBA_THRESHOLD 
+                 || num.value_.size() < KARATSUBA_THRESHOLD) 
+                 ? multiply 
+                 : karatsubaMultiply;
     bigInteger product;
     product.sign_ = this->sign_ == num.sign_ 
                   ? IS_POSITIVE : IS_NEGATIVE;
