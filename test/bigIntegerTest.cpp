@@ -24,13 +24,13 @@ int main() {
     // std::cout << t.substr(0, t.size() - half) <<std::endl;
     // std::cout << t.substr(t.size() - half) <<std::endl;
     // return 0;
-    math::bigInteger a = -86578, b = 342, c = -111111;
+    math::bigInteger a = -86578, b = 1, c = -111111;
     int i = 2;
     //c = (a*b);
-    c *= a;
-    auto d = a*b;
+    c = b / a;
+    //auto d = a*b;
     std::cout << c << std::endl;
-        std::cout << d << std::endl;
+    //std::cout << d << std::endl;
 
     return 0;
 }

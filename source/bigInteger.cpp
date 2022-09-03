@@ -160,8 +160,8 @@ math::bigInteger::safeAdd(const std::string& num_a, const std::string& num_b) {
 
 std::string 
 math::bigInteger::unsafeSubtract(std::string num_a, std::string num_b) {
-    //time complexity: O(max(num_a.size(), num_b.size()))
-    //space complexity: O(1)
+    //Algorithmic Time Complexity: O(max(num_a.size(), num_b.size()))
+    //Algorithmic Space Complexity: O(1)
     int carrier = 0;
     int bitresult = 0;
     std::string fullResult;
@@ -272,6 +272,8 @@ math::bigInteger::isEqual(const std::string& num_a, const std::string& num_b) {
 
 std::string 
 math::bigInteger::multiply(std::string num_a, std::string num_b) {
+    // Algorithmic Time Complexity : O(num_a.size() * num_b.size())
+    // Algorithmic Space Complexity : O(num_a.size() + num_b.size())
     if(isEqual(num_a, ZERO) || isEqual(num_b, ZERO)) {
         return "0";//std::to_string(ZERO);
     }
@@ -332,6 +334,116 @@ math::bigInteger::karatsubaMultiply(std::string num_a, std::string num_b) {
     auto prodruct =  safeAdd(safeAdd(p1,temp),p2);
     auto pos = prodruct.find_first_not_of(ZERO);
     return prodruct.substr(pos == std::string::npos ? 0 : pos);
+}
+
+std::string
+math::bigInteger::max(const std::string& num_a, const std::string& num_b) {
+    return isSmaller(num_a, num_b) ? num_b : num_a;
+}
+
+bool
+math::bigInteger::is_strictlyMaximum(std::string str1, std::string str2) {    //checks if str1 > str2, numerically
+    if(str1 == str2)
+        return false;
+    if(str1 == max(str1, str2))
+        return true;
+    return false;
+}
+
+std::string
+math::bigInteger::pow(std::string str1, std::string str2) {                  // returns str1^str2, ^ -> power, numerically
+    if(str2 == "0") {
+        return "1";
+    } else if(str1 == "0") {
+        if(str2[0] == '-')
+            return std::to_string((long long int)std::pow(0, -5));
+        return "0";
+    } else if(str1[0] == '-' && str2[0] == '-') {
+        if(str1 == "-1" && str2 == "-1") {
+            return "-1";
+        } else if(str1 == "-1") {
+            if((((int)str2[str2.length()-1])-48) & 1) {                
+                return "-1";
+            } else {
+                return "1";
+            }
+        } else {
+            return "0";
+        }
+    } else if(str1[0] == '-') {
+        if((((int)str2[str2.length()-1])-48) & 1)
+            return '-' + pow(str1.erase(0, 1), str2);
+        return pow(str1.erase(0, 1), str2);
+    } else if(str2[0] == '-') {
+        if(str1 == "1") {
+            return str1;
+        } else {
+            return "0";
+        }
+    } else {
+        std::string init_str1 = str1;
+        while(str2 != "1") {
+            str1 = multiply(str1, init_str1);
+            str2 = safeSubtract(str2, "1");
+        }
+        return str1;
+    }
+}
+
+std::string
+math::bigInteger::safeDiveide(std::string num_a, std::string num_b) {
+     std::string ans = "";
+    if(num_b == "0") {
+        return "0";
+    } else if(num_a == num_b) {
+        return "1";
+    } else if(num_a[0] == '-' && num_b[0] == '-') {
+        ans = safeDiveide(num_a.erase(0, 1), num_b.erase(0, 1));
+    } else if(num_a[0] == '-') {
+        std::string temp = safeDiveide(num_a.erase(0, 1), num_b);
+        if(temp == "0")
+            ans = temp;
+        else
+            ans = '-' + temp;        
+    } else if(num_b[0] == '-') {
+        std::string temp = safeDiveide(num_a, num_b.erase(0, 1));
+        if(temp == "0")
+            ans = temp;
+        else
+            ans = '-' + temp; 
+    } else { 
+        if(num_b == "1")
+            return num_a;
+        if(is_strictlyMaximum(num_b, num_a)) {
+            return "0";
+        }
+        // if(num_b.length() <= 19) {
+        //     std::stringstream strstrm(num_b);
+        //     unsigned long long int int_str2 = 0;
+        //     strstrm >> int_str2;
+        //     ans = shortDivide(num_a, int_str2);
+        // }
+        // else {
+            std::string temp = num_b;
+            ans = "0";
+            std::string count = "0";
+            while(num_a == max(num_a, num_b)) {
+                int lenDiff = num_a.length() - num_b.length();
+                if(lenDiff > 0 && num_a[0] > num_b[0]) {
+                    count = safeAdd(count, pow("10", std::to_string(lenDiff)));
+                    num_a = safeSubtract(num_a, multiply(num_b, pow("10", std::to_string(lenDiff))));
+                } else if(lenDiff > 0) {
+                    count = safeAdd(count, pow("10", std::to_string(lenDiff-1)));
+                    num_a = safeSubtract(num_a, multiply(num_b, pow("10", std::to_string(lenDiff-1))));
+                } else {
+                    count = safeAdd(count, "1");
+                    num_a = safeSubtract(num_a, num_b);
+                }
+            // }
+            ans = count;
+        }
+    }
+    return ans;
 }
 
 std::ostream& 
@@ -501,6 +613,7 @@ math::bigInteger::operator-=(const bigInteger& num) {
 
 math::bigInteger 
 math::bigInteger::operator*(const bigInteger& num) {
+    //choose multiplication algorithm
     std::string (*multiply_fun)(std::string num_a, std::string num_b);
     multiply_fun = (this->value_.size() < KARATSUBA_THRESHOLD 
                  || num.value_.size() < KARATSUBA_THRESHOLD) 
@@ -517,3 +630,12 @@ math::bigInteger&
 math::bigInteger::operator*=(const bigInteger& num) {
     return *this = *this * num;
 }
+
+math::bigInteger 
+math::bigInteger::operator/(const bigInteger& num) {
+    bigInteger quotient;
+    quotient.sign_ = this->sign_ == num.sign_ 
+                  ? IS_POSITIVE : IS_NEGATIVE;
+    quotient.value_ = safeDiveide(this->value_, num.value_);
+    return quotient;
+}   

@@ -193,6 +193,24 @@ namespace math {
              * @return std::string product
              */
             static std::string karatsubaMultiply(std::string num_a, std::string num_b);
+            /**
+             * @brief max of num_a and num_b
+             * 
+             * @param num_a a string type positive num
+             * @param num_b a string type positive num
+             * @return std::string 
+             */
+            static std::string max(const std::string& num_a, const std::string& num_b);
+            /**
+             * @brief divide 
+             * 
+             * @param num_a a string type positive num
+             * @param num_b a string tyep positive num
+             * @return std::string quotient
+             */
+            static std::string safeDiveide(std::string num_a, std::string num_b);
+            static bool is_strictlyMaximum(std::string str1, std::string str2);
+            static std::string pow(std::string str1, std::string str2);                 // returns str1^str2, ^ -> power, numerically
 
         public:
             friend std::ostream& operator<<(std::ostream& os, const math::bigInteger& num);
@@ -232,6 +250,7 @@ namespace math {
             
             bigInteger operator*(const bigInteger& num);
             bigInteger& operator*=(const bigInteger& num);
+            bigInteger operator/(const bigInteger& num);
     };
 
     /**
