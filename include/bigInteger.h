@@ -2,7 +2,7 @@
   * @file       bigInteger.h
   * @author     Xun Zeng
   * @date       2022-08-20
-  * @lastedit   2022-08-28
+  * @lastedit   2022-09-10
   * @brief      Big integer arithmetic.
   ******************************************************************************/
 
@@ -208,7 +208,7 @@ namespace math {
              * @param num_b a string tyep positive num
              * @return std::string quotient
              */
-            static std::string safeDiveide(std::string num_a, std::string num_b);
+            static std::string safeDivide(std::string num_a, std::string num_b);
             static bool is_strictlyMaximum(std::string str1, std::string str2);
             static std::string pow(std::string str1, std::string str2);                 // returns str1^str2, ^ -> power, numerically
 
@@ -251,6 +251,7 @@ namespace math {
             bigInteger operator*(const bigInteger& num);
             bigInteger& operator*=(const bigInteger& num);
             bigInteger operator/(const bigInteger& num);
+            bigInteger& operator/=(const bigInteger& num);
     };
 
     /**

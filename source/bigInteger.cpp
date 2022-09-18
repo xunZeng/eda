@@ -2,7 +2,7 @@
   * @file       bigInteger.cpp
   * @author     Xun Zeng
   * @date       2022-08-20
-  * @lastedit   2022-08-28
+  * @lastedit   2022-09-10
   * @brief      Big integer arithmetic.
   ******************************************************************************/
 
@@ -391,22 +391,22 @@ math::bigInteger::pow(std::string str1, std::string str2) {                  // 
 }
 
 std::string
-math::bigInteger::safeDiveide(std::string num_a, std::string num_b) {
+math::bigInteger::safeDivide(std::string num_a, std::string num_b) {
      std::string ans = "";
     if(num_b == "0") {
         return "0";
     } else if(num_a == num_b) {
         return "1";
     } else if(num_a[0] == '-' && num_b[0] == '-') {
-        ans = safeDiveide(num_a.erase(0, 1), num_b.erase(0, 1));
+        ans = safeDivide(num_a.erase(0, 1), num_b.erase(0, 1));
     } else if(num_a[0] == '-') {
-        std::string temp = safeDiveide(num_a.erase(0, 1), num_b);
+        std::string temp = safeDivide(num_a.erase(0, 1), num_b);
         if(temp == "0")
             ans = temp;
         else
             ans = '-' + temp;        
     } else if(num_b[0] == '-') {
-        std::string temp = safeDiveide(num_a, num_b.erase(0, 1));
+        std::string temp = safeDivide(num_a, num_b.erase(0, 1));
         if(temp == "0")
             ans = temp;
         else
@@ -636,6 +636,11 @@ math::bigInteger::operator/(const bigInteger& num) {
     bigInteger quotient;
     quotient.sign_ = this->sign_ == num.sign_ 
                   ? IS_POSITIVE : IS_NEGATIVE;
-    quotient.value_ = safeDiveide(this->value_, num.value_);
+    quotient.value_ = safeDivide(this->value_, num.value_);
     return quotient;
 }   
+
+math::bigInteger& 
+math::bigInteger::operator/=(const bigInteger& num) {
+    return *this = *this / num;
+}

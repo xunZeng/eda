@@ -13,7 +13,9 @@
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe",
                 "--include-directory",
-                "${workspaceFolder}\\include"
+                "${workspaceFolder}\\include",
+                "-lgmpxx",
+                "-lgmp"
             ],
             "options": {
                 "cwd": "D:\\msys64\\mingw64\\bin"

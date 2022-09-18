@@ -11,6 +11,8 @@
 
 #include <iostream>
 #include "bigInteger.h"
+#include "gmp.h"
+#include "precisionFloat.h"
 
 
 /**
@@ -19,6 +21,20 @@
  * @return int: return 0 if sucess
  */
 int main() {
+    mpf_t x,y,z;
+    mpf_init2(x, 3);
+    mpf_init2(y, 3);
+    mpf_init2(z, 1);
+    mpf_set_str(x, "24124.5555555555", 10);
+    mpf_set_str(y, "2", 10);
+    mpf_mul(z,x,y);
+    gmp_printf("x = %Ff\n", x); 
+    gmp_printf("y = %Ff\n", y); 
+    gmp_printf("z = %Ff\n", z); 
+    mpf_clear(x);
+    mpf_clear(y);
+    mpf_clear(z);
+    // return 0;
     // std::string t ="";
     // math::uInt half = t.size() / 2;
     // std::cout << t.substr(0, t.size() - half) <<std::endl;

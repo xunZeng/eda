@@ -62,7 +62,9 @@
         "random": "cpp",
         "string_view": "cpp",
         "numbers": "cpp",
-        "semaphore": "cpp"
+        "semaphore": "cpp",
+        "fstream": "cpp",
+        "sstream": "cpp"
     },
     "projectManager.git.baseFolders": [
         "https://github.com/xunZeng/eda.git"
