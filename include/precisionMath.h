@@ -2,20 +2,26 @@
   * @file       precisionMath.h
   * @author     Xun Zeng
   * @date       2022-09-12
-  * @lastedit   2022-09-18
+  * @lastedit   2022-10-21
   * @brief      High precision arithmetic supported by GMP.
   ******************************************************************************/
 
 #ifndef _PRECISION_MATH_H_
 #define _PRECISION_MATH_H_
 
-#include "gmpxx.h"
+#include <gmpxx.h>
 
 /**
  * @brief math base
  * 
  */
 namespace math {  
+    /**
+     * @brief global precision for pmath_t
+     * 
+     */
+    static const unsigned int precision = 4;
+    static const unsigned int scale = 4;
 
     /**
      * @brief precisionMath class
@@ -25,10 +31,16 @@ namespace math {
     class precisionMath : public __gmp_expr<T, U>{
 
         private:
-            using uInt = unsigned int;
-            using pmath_t = precisionMath<T, U>;
             using gmp_t = __gmp_expr<T, U>;
             using gmpInit = gmp_t;
+            using pint_t = precisionMath<mpz_t, mpz_t>;
+            using pfloat_t = precisionMath<mpf_t, mpf_t>;
+
+        private:
+            int toInt();
+            float toFloat();
+            pint_t toPInt();
+            pfloat_t toPFloat();
 
         public:
             /**
@@ -55,6 +67,7 @@ namespace math {
     typedef precisionMath<mpz_t, mpz_t> pint_t;
     typedef precisionMath<mpq_t, mpq_t> pration_t;
     // typedef gmp_randclass prandom_t;
+    typedef pfloat_t pmath_t;
 }
 
 #endif // _PRECISION_MATH_H_

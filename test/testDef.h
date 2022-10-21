@@ -11,8 +11,8 @@
 
 #include <string> 
 
-//#define BIGINTEGER_TEST
-//#define BIGDECIMAL_TEST
+// #define BIGINTEGER_TEST
+// #define BIGDECIMAL_TEST
 #define PRECISION_MATH_TEST
 
 

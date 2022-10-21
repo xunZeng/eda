@@ -15,7 +15,9 @@
                 "--include-directory",
                 "${workspaceFolder}\\include",
                 "-lgmpxx",
-                "-lgmp"
+                "-lgmp",
+                "-I",
+                "D:\\boost_1_80_0"
             ],
             "options": {
                 "cwd": "D:\\msys64\\mingw64\\bin"

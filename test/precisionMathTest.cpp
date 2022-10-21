@@ -13,6 +13,7 @@
 // #include "gmp.h"
 // #include "gmpxx.h"
 #include "precisionMath.h"
+#include "geometry.h"
 
 template<typename T>
 struct A {
@@ -40,23 +41,54 @@ class B : public A<T> {
     ~B(){}
 };
 
+class C {
+    public:
+    int x = 1;
+    C() : x(1) {}
+};
+
+class D : public C{
+    public:
+    int y = 1;
+    D() :  y(0) {}
+};
+
+
 /*
  * @brief bigInteger main function
  * 
  * @return int: return 0 if sucess
  */
 int main() {
-    math::pfloat_t i = 1231241410.2345346;
-    std::cout << i << std::endl;
+    C c;
+    D d;
+    std::cout << c.x << " " << d.x << " " << d.y << std::endl;
     return 0;
-    math::pfloat_t d(1);
+    // geo::point_t p1(1.005, 2.005);
+    // std::cout << p1.x() << " " << p1.y() << std::endl;
+    // geo::point_t p2(-2, -4.01);
+    // geo::linesegment_t seg{p1, p2};
+    // std::cout << seg.second.x() << " " << seg.second.y() << std::endl;
+    // geo::polygonlayer_t polygon;
+    
+    
+    return 0;
+    math::pmath_t a = 123456; 
+    math::pmath_t b = 123456;
+    std::cout << a << std::endl;
+    std::cout << b << std::endl;
+    std::cout << (a == b) << std::endl;
+    std::cout << (a * b) << std::endl;
+    std::cout << (a * b / 1000000) << std::endl;
+    // system("pause");
+    // math::pfloat_t d(1);
     // mpf_class a = 1.511;
     // double t = 1.5;
     // mpf_class b = -2;
     // math::pFloat c(1);
     
-    --d;
-    std::cout << d << std::endl;
+    // --d;
+    // std::cout << d << std::endl;
     // typedef mpf_class pfloat;
     // math::pFloat f = 12.123;
     // std::cout << (-d) <<std::endl;
@@ -70,7 +102,7 @@ int main() {
     //std::cout << b;
     //mpf_class c = a/b;
     //gmp_printf("x = %Ff\n", b); 
-
+    
     return 0;
     // mpf_t x,y,z;
     // mpf_init_set_str(x, "24124.5555555555", 10);
