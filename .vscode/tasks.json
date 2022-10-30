@@ -10,6 +10,7 @@
                 "${file}",
                 "${workspaceFolder}\\source\\bigInteger.cpp",
                 "${workspaceFolder}\\source\\bigDecimal.cpp",
+                "${workspaceFolder}\\source\\geometry.cpp",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe",
                 "--include-directory",

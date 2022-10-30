@@ -13,7 +13,7 @@
 
 // #define BIGINTEGER_TEST
 // #define BIGDECIMAL_TEST
-#define PRECISION_MATH_TEST
-
+// #define PRECISION_MATH_TEST
+#define GEOMETRY_TEST
 
 #endif //_TESTDEF_H_

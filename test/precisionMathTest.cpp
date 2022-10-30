@@ -13,7 +13,6 @@
 // #include "gmp.h"
 // #include "gmpxx.h"
 #include "precisionMath.h"
-#include "geometry.h"
 
 template<typename T>
 struct A {
@@ -55,24 +54,11 @@ class D : public C{
 
 
 /*
- * @brief bigInteger main function
+ * @brief precisionMath main function
  * 
  * @return int: return 0 if sucess
  */
 int main() {
-    C c;
-    D d;
-    std::cout << c.x << " " << d.x << " " << d.y << std::endl;
-    return 0;
-    // geo::point_t p1(1.005, 2.005);
-    // std::cout << p1.x() << " " << p1.y() << std::endl;
-    // geo::point_t p2(-2, -4.01);
-    // geo::linesegment_t seg{p1, p2};
-    // std::cout << seg.second.x() << " " << seg.second.y() << std::endl;
-    // geo::polygonlayer_t polygon;
-    
-    
-    return 0;
     math::pmath_t a = 123456; 
     math::pmath_t b = 123456;
     std::cout << a << std::endl;
