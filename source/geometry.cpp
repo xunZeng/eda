@@ -8,6 +8,27 @@
 
 #include "geometry.h"
 
+geo::lppair_t makeLPPair(geo::lnum_t layer_num, geo::pnum_t purpose_num) {
+    return (static_cast<geo::lppair_t>(layer_num) << 32) | static_cast<geo::lppair_t>(purpose_num);
+}
+
+geo::lnum_t getLayerNum(geo::lppair_t lppair) {
+    return static_cast<geo::lnum_t>(lppair >> 32);
+}
+
+geo::pnum_t getPurposeNum(geo::lppair_t lppair) {
+    return static_cast<geo::pnum_t>(lppair);
+}
+
+void setLayerNum(geo::lppair_t& lppair, geo::lnum_t layer_num) {
+    lppair |= (static_cast<geo::lppair_t>(layer_num) << 32);
+}
+
+void setPurposeNum(geo::lppair_t& lppair, geo::pnum_t purpose_num) {
+    lppair |= static_cast<geo::lppair_t>(purpose_num);
+}
+
+
 geo::lrect_t::lrect_t() : lppair_(static_cast<lppair_t>(0)) {
 }
 
@@ -34,12 +55,12 @@ geo::lrect_t::~lrect_t() {
 
 geo::lnum_t
 geo::lrect_t::layerNum() const {
-    return static_cast<lnum_t>(lppair_ >> 32);
+    return getLayerNum(lppair_ >> 32);
 }
 
 geo::pnum_t
 geo::lrect_t::purposeNum() const {
-    return static_cast<pnum_t>(lppair_);
+    return getPurposeNum(lppair_);
 }
 
 geo::lppair_t
@@ -49,12 +70,12 @@ geo::lrect_t::lppair() const {
 
 void
 geo::lrect_t::layerNum(lnum_t layer_num) {
-    lppair_ |= (static_cast<lppair_t>(layer_num) << 32);
+    setLayerNum(lppair_, layer_num);
 }
 
 void
 geo::lrect_t::purposeNum(pnum_t purpose_num) {
-    lppair_ |= static_cast<lppair_t>(purpose_num);
+    setPurposeNum(lppair_, purpose_num);
 }
 
 void
@@ -64,7 +85,7 @@ geo::lrect_t::lppair(lppair_t lppair) {
 
 void
 geo::lrect_t::lppair(lnum_t layer_num, pnum_t purpose_num) {
-    lppair_ = (static_cast<lppair_t>(layer_num) << 32) | static_cast<lppair_t>(purpose_num);
+    lppair_ = makeLPPair(layer_num, purpose_num);
 }
 
 geo::lpolygon_t::lpolygon_t() {

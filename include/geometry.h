@@ -32,6 +32,12 @@ namespace geo {
     typedef bg::model::box<point_t>               rect_t;
     typedef bg::model::polygon<point_t>           polygon_t;
 
+    lppair_t makeLPPair(lnum_t layer_num, pnum_t purpose_num);
+    lnum_t getLayerNum(lppair_t lppair);
+    pnum_t getPurposeNum(lppair_t lppair);
+    void setLayerNum(lppair_t& lppair, lnum_t layer_num);
+    void setPurposeNum(lppair_t& lppair, pnum_t purpose_num);
+
     /**
      * @brief layer rect class
      * 
