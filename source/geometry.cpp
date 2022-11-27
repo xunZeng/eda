@@ -6,7 +6,7 @@
   * @brief      Polygon geometry operations supported by BOOST Geometry.
   ******************************************************************************/
 
-#include "geometry.h"
+#include <geometry.h>
 
 geo::lppair_t makeLPPair(geo::lnum_t layer_num, geo::pnum_t purpose_num) {
     return (static_cast<geo::lppair_t>(layer_num) << 32) | static_cast<geo::lppair_t>(purpose_num);
